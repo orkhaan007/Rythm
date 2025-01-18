@@ -14,28 +14,41 @@ interface UserData {
   id: string;
   username: string;
   email: string;
-  filePath: string;
 }
 
 const Sidebar: React.FC<SidebarProps> = ({ isExpanded, setIsExpanded, onSignOut }) => {
   const location = useLocation();
+  const [profilePhotoPath, setProfilePhotoPath] = useState<string | null>(null);
   const [isDarkMode, setIsDarkMode] = useState(() => {
     return document.documentElement.getAttribute('data-theme') === 'dark';
   });
 
-  const [userData, setUserData] = useState<UserData | null>(null);
+  const userDataString = localStorage.getItem('userData');
+  const userData: UserData | null = userDataString ? JSON.parse(userDataString) : null;
+  const userId = userData?.id;
 
   useEffect(() => {
-    const userDataStr = localStorage.getItem('userData');
-    if (userDataStr) {
+    const fetchProfilePhoto = async () => {
+      if (!userId) return;
       try {
-        const parsedUserData = JSON.parse(userDataStr);
-        setUserData(parsedUserData);
+        const response = await fetch(`http://localhost:7000/auth/getUserProfilePhoto/${userId}`, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+          },
+        });
+        if (response.ok) {
+          const data = await response.json();
+          setProfilePhotoPath(data.ProfilePhotoUrl);
+        } else {
+          console.error('Failed to fetch profile photo');
+        }
       } catch (error) {
-        console.error('Error parsing user data:', error);
+        console.error('Error fetching profile photo:', error);
       }
-    }
-  }, []);
+    };
+
+    fetchProfilePhoto();
+  }, [userId]);
 
   const toggleDarkMode = () => {
     const newMode = !isDarkMode;
@@ -60,9 +73,9 @@ const Sidebar: React.FC<SidebarProps> = ({ isExpanded, setIsExpanded, onSignOut 
       
       <div className="profile-section">
         <div className="profile-image">
-          {userData?.filePath ? (
+          {profilePhotoPath ? (
             <img 
-              src={`${userData.filePath}`}
+              src={profilePhotoPath}
               alt="Profile" 
               onError={(e) => {
                 const target = e.target as HTMLImageElement;

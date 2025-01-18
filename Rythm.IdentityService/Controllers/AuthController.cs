@@ -83,6 +83,7 @@ namespace Rythm.IdentityService.Controllers
                     new Claim(ClaimTypes.Name, user.UserName),
                     new Claim(ClaimTypes.Email, user.Email),
                     new Claim(ClaimTypes.NameIdentifier, user.Id),
+                    new Claim("profile-photo",user.ProfilePhotoPath),
                     new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                 };
 
@@ -113,6 +114,58 @@ namespace Rythm.IdentityService.Controllers
             return token;
         }
 
+        [HttpPut("changeUsername")]
+        public async Task<IActionResult> ChangeUsername([FromBody] ChangeUsernameDTO dto)
+        {
+            var user = await _userManager.FindByIdAsync(dto.UserId);
+            if (user == null)
+            {
+                return NotFound(new { Status = "Error", Message = "User not found" });
+            }
+
+            var existingUser = await _userManager.FindByNameAsync(dto.NewUsername);
+            if (existingUser != null)
+            {
+                return BadRequest(new { Status = "Error", Message = "Username already taken" });
+            }
+
+            user.UserName = dto.NewUsername;
+            var result = await _userManager.UpdateAsync(user);
+
+            if (result.Succeeded)
+            {
+                return Ok(new { Status = "Success", Message = "Username updated successfully" });
+            }
+
+            return BadRequest(new { Status = "Error", Message = "Failed to update username", Errors = result.Errors });
+        }
+
+        [HttpPut("changeEmail")]
+        public async Task<IActionResult> ChangeEmail([FromBody] ChangeEmailDTO dto)
+        {
+            var user = await _userManager.FindByIdAsync(dto.UserId);
+            if (user == null)
+            {
+                return NotFound(new { Status = "Error", Message = "User not found" });
+            }
+
+            var existingUser = await _userManager.FindByEmailAsync(dto.NewEmail);
+            if (existingUser != null)
+            {
+                return BadRequest(new { Status = "Error", Message = "Email already in use" });
+            }
+
+            user.Email = dto.NewEmail;
+            var result = await _userManager.UpdateAsync(user);
+
+            if (result.Succeeded)
+            {
+                return Ok(new { Status = "Success", Message = "Email updated successfully" });
+            }
+
+            return BadRequest(new { Status = "Error", Message = "Failed to update email", Errors = result.Errors });
+        }
+
         [HttpGet("getUserById/{id}")]
         public async Task<IActionResult> GetUserById(string id)
         {
@@ -122,6 +175,41 @@ namespace Rythm.IdentityService.Controllers
                 return NotFound(new { Status = "Error", Message = "User not found" });
             }
             return Ok(new { user.Id, user.UserName });
+        }
+
+        [HttpGet("getUserProfilePhoto/{id}")]
+        public async Task<IActionResult> GetUserProfilePhoto(string id)
+        {
+            var user = await _userManager.FindByIdAsync(id);
+            if (user == null)
+            {
+                return NotFound(new { Status = "Error", Message = "User not found" });
+            }
+
+            if (string.IsNullOrEmpty(user.ProfilePhotoPath))
+            {
+                return NotFound(new { Status = "Error", Message = "User does not have a profile photo" });
+            }
+
+            return Ok(new { user.Id, ProfilePhotoUrl = user.ProfilePhotoPath });
+        }
+
+        [HttpDelete("deleteAccount/{userId}")]
+        public async Task<IActionResult> DeleteAccount(string userId)
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user == null)
+            {
+                return NotFound(new { Status = "Error", Message = "User not found" });
+            }
+
+            var result = await _userManager.DeleteAsync(user);
+            if (result.Succeeded)
+            {
+                return Ok(new { Status = "Success", Message = "Account deleted successfully" });
+            }
+
+            return BadRequest(new { Status = "Error", Message = "Failed to delete account", Errors = result.Errors });
         }
 
     }

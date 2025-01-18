@@ -10,7 +10,7 @@
         }
       ],
       "UpstreamPathTemplate": "/auth/{everything}",
-      "UpstreamHttpMethod": [ "Get", "Post" ]
+      "UpstreamHttpMethod": [ "Get", "Post", "Delete", "Put" ]
     },
     {
         "DownstreamPathTemplate": "/api/music/{everything}",

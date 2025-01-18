@@ -222,6 +222,35 @@
   background: #fecaca;
 }
 
+.change-username-button,
+.change-email-button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 24px;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  background: var(--background-elevated);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+}
+
+.change-username-button:hover,
+.change-email-button:hover {
+  background: var(--background-hover);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.change-username-button svg,
+.change-email-button svg {
+  font-size: 1.2rem;
+  color: var(--accent-color);
+}
+
 .modal {
   position: fixed;
   top: 0;

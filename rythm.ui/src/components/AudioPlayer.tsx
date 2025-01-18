@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { FaPlay, FaPause, FaStepForward, FaStepBackward, FaVolumeUp } from 'react-icons/fa';
+import { FaPlay, FaPause, FaStepForward, FaStepBackward, FaVolumeUp, FaVolumeMute } from 'react-icons/fa';
 import '../assets/styles/AudioPlayer.css';
 
 interface AudioPlayerProps {
@@ -8,12 +8,14 @@ interface AudioPlayerProps {
     title: string;
     musicPath: string;
     uploadedBy: string;
+    filePath?: string; // For song image
   } | null;
   playlist: Array<{
     id: string;
     title: string;
     musicPath: string;
     uploadedBy: string;
+    filePath?: string;
   }>;
   onNextSong: () => void;
   onPrevSong: () => void;
@@ -29,6 +31,7 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
   const [volume, setVolume] = useState(1);
+  const [isMuted, setIsMuted] = useState(false);
   
   const audioRef = useRef<HTMLAudioElement>(null);
   const progressBarRef = useRef<HTMLDivElement>(null);
@@ -58,24 +61,36 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({
     }
   };
 
-  const handleProgressBarClick = (event: React.MouseEvent<HTMLDivElement>) => {
+  const handleProgressClick = (e: React.MouseEvent<HTMLDivElement>) => {
     if (progressBarRef.current && audioRef.current) {
-      const progressBar = progressBarRef.current;
-      const rect = progressBar.getBoundingClientRect();
-      const x = event.clientX - rect.left;
-      const width = rect.width;
-      const percentage = x / width;
-      const newTime = percentage * duration;
-      audioRef.current.currentTime = newTime;
-      setCurrentTime(newTime);
+      const rect = progressBarRef.current.getBoundingClientRect();
+      const pos = (e.clientX - rect.left) / rect.width;
+      audioRef.current.currentTime = pos * duration;
     }
   };
 
-  const handleVolumeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const newVolume = parseFloat(event.target.value);
+  const handleVolumeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newVolume = parseFloat(e.target.value);
     setVolume(newVolume);
     if (audioRef.current) {
       audioRef.current.volume = newVolume;
+    }
+    if (newVolume === 0) {
+      setIsMuted(true);
+    } else {
+      setIsMuted(false);
+    }
+  };
+
+  const toggleMute = () => {
+    if (audioRef.current) {
+      if (isMuted) {
+        audioRef.current.volume = volume;
+        setIsMuted(false);
+      } else {
+        audioRef.current.volume = 0;
+        setIsMuted(true);
+      }
     }
   };
 
@@ -85,65 +100,78 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({
     return `${minutes}:${seconds.toString().padStart(2, '0')}`;
   };
 
+  if (!currentSong) return null;
+
+  const defaultImage = 'https://via.placeholder.com/60';
+
   return (
     <div className="audio-player">
-      {currentSong && (
-        <>
-          <audio
-            ref={audioRef}
-            src={currentSong.musicPath}
-            onTimeUpdate={handleTimeUpdate}
-            onEnded={onNextSong}
-          />
-          
-          <div className="song-info">
-            <div className="song-title">{currentSong.title}</div>
-            <div className="song-artist">{currentSong.uploadedBy}</div>
-          </div>
+      <div className="song-info">
+        <div className="song-image">
+          <img src={currentSong.filePath || defaultImage} alt={currentSong.title} />
+        </div>
+        <div className="song-details">
+          <div className="song-title">{currentSong.title}</div>
+          <div className="song-artist">{currentSong.uploadedBy}</div>
+        </div>
+      </div>
 
-          <div className="controls">
-            <button onClick={onPrevSong} className="control-button">
-              <FaStepBackward />
-            </button>
-            
-            <button onClick={togglePlay} className="control-button play-button">
-              {isPlaying ? <FaPause /> : <FaPlay />}
-            </button>
-            
-            <button onClick={onNextSong} className="control-button">
-              <FaStepForward />
-            </button>
-          </div>
+      <div className="player-controls">
+        <div className="control-buttons">
+          <button className="control-button" onClick={onPrevSong}>
+            <FaStepBackward />
+          </button>
+          <button className="control-button play-pause" onClick={togglePlay}>
+            {isPlaying ? <FaPause /> : <FaPlay />}
+          </button>
+          <button className="control-button" onClick={onNextSong}>
+            <FaStepForward />
+          </button>
+        </div>
 
-          <div className="progress-container">
-            <span className="time">{formatTime(currentTime)}</span>
-            <div
-              ref={progressBarRef}
-              className="progress-bar"
-              onClick={handleProgressBarClick}
-            >
-              <div
-                className="progress"
-                style={{ width: `${(currentTime / duration) * 100}%` }}
-              />
-            </div>
-            <span className="time">{formatTime(duration)}</span>
-          </div>
-
-          <div className="volume-control">
-            <FaVolumeUp />
-            <input
-              type="range"
-              min="0"
-              max="1"
-              step="0.1"
-              value={volume}
-              onChange={handleVolumeChange}
-              className="volume-slider"
+        <div className="progress-container">
+          <span>{formatTime(currentTime)}</span>
+          <div 
+            className="progress-bar" 
+            ref={progressBarRef}
+            onClick={handleProgressClick}
+          >
+            <div 
+              className="progress" 
+              style={{ width: `${(currentTime / duration) * 100}%` }}
             />
           </div>
-        </>
-      )}
+          <span>{formatTime(duration)}</span>
+        </div>
+      </div>
+
+      <div className="volume-control">
+        <button className="volume-button" onClick={toggleMute}>
+          {isMuted ? <FaVolumeMute /> : <FaVolumeUp />}
+        </button>
+        <div className="volume-slider">
+          <div 
+            className="volume-level" 
+            style={{ width: `${isMuted ? 0 : volume * 100}%` }}
+          />
+          <input
+            type="range"
+            min="0"
+            max="1"
+            step="0.01"
+            value={isMuted ? 0 : volume}
+            onChange={handleVolumeChange}
+            style={{ width: '100%', opacity: 0, cursor: 'pointer' }}
+          />
+        </div>
+      </div>
+
+      <audio
+        ref={audioRef}
+        src={currentSong.musicPath}
+        onTimeUpdate={handleTimeUpdate}
+        onEnded={onNextSong}
+      />
     </div>
   );
 };
