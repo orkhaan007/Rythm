@@ -3,10 +3,10 @@ import { Link } from 'react-router-dom';
 import { musicApi } from '../api/music';
 import { Music } from '../api/music';
 import '../assets/styles/Home.css';
-import { FaPlay, FaHeart } from 'react-icons/fa';
+import { FaPlay, FaHeart, FaClock, FaSearch, FaSort } from 'react-icons/fa';
 import SongContextMenu from '../components/SongContextMenu';
 import { favoritesService } from '../services/favoritesService';
-import axios from 'axios'; // Axios for HTTP requests
+import axios from 'axios';
 
 interface ContextMenu {
   x: number;
@@ -21,14 +21,20 @@ interface UserData {
   profilePhotoPath: string;
 }
 
+const defaultCoverArt = 'https://via.placeholder.com/150';
+
 const Home: React.FC = () => {
   const [music, setMusic] = useState<Music[]>([]);
+  const [filteredMusic, setFilteredMusic] = useState<Music[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [hoveredCard, setHoveredCard] = useState<string | null>(null);
   const [contextMenu, setContextMenu] = useState<ContextMenu | null>(null);
   const [favorites, setFavorites] = useState<string[]>([]);
-  const [usernames, setUsernames] = useState<{ [key: string]: string }>({}); // Store usernames
+  const [searchQuery, setSearchQuery] = useState('');
+  const [activeFilter, setActiveFilter] = useState<'all' | 'favorites'>('all');
+  const [usernames, setUsernames] = useState<{ [key: string]: string }>({});
+
   const userDataString = localStorage.getItem('userData');
   const userData: UserData | null = userDataString ? JSON.parse(userDataString) : null;
   const userId = userData?.id;
@@ -41,9 +47,9 @@ const Home: React.FC = () => {
           userId ? favoritesService.getFavorites(userId) : Promise.resolve([]),
         ]);
         setMusic(musicData);
+        setFilteredMusic(musicData);
         setFavorites(favoritesData);
 
-        // Fetch usernames for all unique uploadedBy IDs
         const uniqueUserIds = Array.from(new Set(musicData.map((track) => track.uploadedBy)));
         const userPromises = uniqueUserIds.map((id) =>
           axios.get(`http://localhost:7000/auth/getUserById/${id}`).then((res) => ({
@@ -69,29 +75,36 @@ const Home: React.FC = () => {
     fetchData();
   }, [userId]);
 
-  const handleContextMenu = (event: React.MouseEvent, songId: string) => {
-    event.preventDefault();
-    setContextMenu({
-      x: event.clientX,
-      y: event.clientY,
-      songId,
-    });
-  };
+  useEffect(() => {
+    let result = [...music];
 
-  const closeContextMenu = () => {
-    setContextMenu(null);
-  };
-
-  const handleFavoriteClick = async (songId: string) => {
-    if (!userId) {
-      console.error('User ID is not available');
-      return;
+    // Apply filter
+    if (activeFilter !== 'all') {
+      if (activeFilter === 'favorites') {
+        result = result.filter(track => favorites.includes(track.id));
+      }
     }
 
+    // Apply search
+    if (searchQuery) {
+      const query = searchQuery.toLowerCase();
+      result = result.filter(
+        track =>
+          track.title.toLowerCase().includes(query) ||
+          usernames[track.uploadedBy]?.toLowerCase().includes(query)
+      );
+    }
+
+    setFilteredMusic(result);
+  }, [music, searchQuery, activeFilter, favorites, usernames]);
+
+  const handleFavoriteClick = async (songId: string) => {
+    if (!userId) return;
+    
     try {
       if (favorites.includes(songId)) {
         await favoritesService.removeFromFavorites(userId, songId);
-        setFavorites(favorites.filter((id) => id !== songId));
+        setFavorites(favorites.filter(id => id !== songId));
       } else {
         await favoritesService.addToFavorites(userId, songId);
         setFavorites([...favorites, songId]);
@@ -101,73 +114,96 @@ const Home: React.FC = () => {
     }
   };
 
+  const handleContextMenu = (e: React.MouseEvent, songId: string) => {
+    e.preventDefault();
+    setContextMenu({
+      x: e.clientX,
+      y: e.clientY,
+      songId,
+    });
+  };
+
   if (loading) {
-    return <div className="loading">Loading...</div>;
+    return (
+      <div className="loading">
+        <div className="loading-spinner" />
+        <p>Loading your music...</p>
+      </div>
+    );
   }
 
   if (error) {
-    return <div className="error">{error}</div>;
+    return <div className="error">Error: {error}</div>;
   }
 
   return (
     <div className="home-container">
-      <h1>Welcome to Rythm</h1>
-
-      <div className="music-grid">
-        {music.length === 0 ? (
-          <div className="no-music">
-            <p>No music available. Start by uploading some tracks!</p>
-            <Link to="/upload" className="upload-button">
-              Upload Music
-            </Link>
-          </div>
-        ) : (
-          music.map((track) => (
-            <div
-              key={track.id}
-              className="music-card"
-              onMouseEnter={() => setHoveredCard(track.id)}
-              onMouseLeave={() => setHoveredCard(null)}
-              onContextMenu={(e) => handleContextMenu(e, track.id)}
-            >
-              <div className="music-image">
-                {track.filePath ? (
-                  <img src={track.filePath} alt={track.title} />
-                ) : (
-                  <div className="music-placeholder">🎵</div>
-                )}
-                <button
-                  className={`favorite-button ${favorites.includes(track.id) ? 'active' : ''}`}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    handleFavoriteClick(track.id);
-                  }}
-                >
-                  <FaHeart />
-                </button>
-                {hoveredCard === track.id && (
-                  <div className="hover-overlay">
-                    <button className="play-button">
-                      <FaPlay />
-                    </button>
-                  </div>
-                )}
-              </div>
-              <div className="music-info">
-                <h3>{track.title}</h3>
-                <p>{usernames[track.uploadedBy] || 'Unknown'}</p>
-              </div>
-            </div>
-          ))
-        )}
+      <div className="search-section">
+        <input
+          type="text"
+          className="search-input"
+          placeholder="Search for songs..."
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+        />
       </div>
 
+      <div className="content-header">
+        <h2>Music Library</h2>
+        <div className="filter-section">
+          <button
+            className={`filter-button ${activeFilter === 'all' ? 'active' : ''}`}
+            onClick={() => setActiveFilter('all')}
+          >
+            All Music
+          </button>
+          <button
+            className={`filter-button ${activeFilter === 'favorites' ? 'active' : ''}`}
+            onClick={() => setActiveFilter('favorites')}
+          >
+            Favorites
+          </button>
+        </div>
+      </div>
+
+      <div className="music-grid">
+        {filteredMusic.map((song) => (
+          <div
+            key={song.id}
+            className="music-card"
+            onMouseEnter={() => setHoveredCard(song.id)}
+            onMouseLeave={() => setHoveredCard(null)}
+            onContextMenu={(e) => handleContextMenu(e, song.id)}
+          >
+            <div className="music-image-container">
+              <img src={song.filePath || defaultCoverArt} alt={song.title} />
+              <div className="play-button-overlay">
+                <button className="play-button">
+                  <FaPlay />
+                </button>
+              </div>
+              <button
+                className={`favorite-button ${favorites.includes(song.id) ? 'active' : ''}`}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleFavoriteClick(song.id);
+                }}
+              >
+                <FaHeart />
+              </button>
+            </div>
+            <div className="music-card-title">{song.title}</div>
+            <div className="music-card-artist">{usernames[song.uploadedBy] || 'Unknown'}</div>
+          </div>
+        ))}
+      </div>
+      
       {contextMenu && (
         <SongContextMenu
           x={contextMenu.x}
           y={contextMenu.y}
           songId={contextMenu.songId}
-          onClose={closeContextMenu}
+          onClose={() => setContextMenu(null)}
         />
       )}
     </div>

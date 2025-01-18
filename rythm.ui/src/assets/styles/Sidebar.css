@@ -97,7 +97,7 @@
 }
 
 .nav-item.active {
-  background: #3b82f6;
+  background: #1ed760;
   color: white;
 }
 
@@ -157,7 +157,7 @@
   width: 24px;
   height: 24px;
   border-radius: 50%;
-  background: #3b82f6;
+  background: #1ed760;
   color: white;
   border: none;
   cursor: pointer;
@@ -200,7 +200,7 @@
 }
 
 [data-theme='dark'] .nav-item.active {
-  background: #3b82f6;
+  background: #1ed760;
   color: #ffffff;
 }
 

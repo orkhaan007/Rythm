@@ -3,6 +3,7 @@ const API_BASE_URL = 'http://localhost:7000';
 export interface Music {
     id: string;
     uploadedBy: string;
+    uploadedAt: string;
     title: string;
     album: string;
     musicPath: string;
