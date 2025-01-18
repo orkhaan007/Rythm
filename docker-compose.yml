@@ -1,0 +1,61 @@
+services:
+  redis:
+    image: redis
+    container_name: redis-server
+    ports:
+      - "6379:6379"
+    networks:
+      - app-network    
+  api-gateway:
+    image: rythm-gateway:dev
+    build:
+      context: .
+      dockerfile: Rythm.ApiGateway/Dockerfile
+    ports:
+      - "7000:8080"  
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+    networks:
+      - app-network
+ 
+  identitymicroservice:
+    image: rythm-identity:dev
+    build:
+      context: .
+      dockerfile: Rythm.IdentityService/Dockerfile
+    ports:
+      - "7001:8080"  
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+    networks:
+      - app-network
+    
+  favoritesservice:
+    image: rythm-favorites:dev
+    build:
+      context: .
+      dockerfile: Rythm.FavoriteService/Dockerfile
+    ports:
+      - "7003:8080"
+    depends_on:
+      - redis
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+    networks:
+      - app-network  
+ 
+  musicmicroservice:
+    image: rythm-music:dev
+    build:
+      context: .
+      dockerfile: Rythm.MusicService/Dockerfile
+    ports:
+      - "7002:8080"  
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+    networks:
+      - app-network
+ 
+networks:
+  app-network:
+    driver: bridge

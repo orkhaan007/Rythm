@@ -1,0 +1,85 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.12.35506.116
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Rythm.Gateway", "Rythm.Gateway", "{460AD708-9BD2-43C6-B4E7-001CD88EC728}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rythm.ApiGateway", "Rythm.ApiGateway\Rythm.ApiGateway.csproj", "{BB38735F-617A-4F12-8223-C3E30C26878D}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Rythm.Services", "Rythm.Services", "{6EAA06EA-DC72-42E2-8302-3E72B1AF1B29}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rythm.IdentityService", "Rythm.IdentityService\Rythm.IdentityService.csproj", "{F4FBE8EB-3669-40EC-B10C-544CDED53FFC}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Rythm.Infrastructure", "Rythm.Infrastructure", "{48C05E5F-96A2-4DDB-83B7-DA9B5A59A0D5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rythm.Infrastructure.Business", "Rythm.Infrastructure.Business\Rythm.Infrastructure.Business.csproj", "{372E9230-5BD5-4F57-A53D-48002336AAF1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rythm.Infrastructure.Core", "Rythm.Infrastructure.Core\Rythm.Infrastructure.Core.csproj", "{31F7501F-B0DF-49B6-8C50-82F9F28C2BA0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rythm.Infrastructure.DataAccess", "Rythm.Infrastructure.DataAccess\Rythm.Infrastructure.DataAccess.csproj", "{20C4E79E-4489-43AB-A697-3977889F75C4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rythm.Infrastructure.Entities", "Rythm.Infrastructure.Entities\Rythm.Infrastructure.Entities.csproj", "{BA94AAD5-31EB-4175-B267-2B643447E382}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rythm.MusicService", "Rythm.MusicService\Rythm.MusicService.csproj", "{E4FFB53E-A319-4613-BA0B-4B094AA329AC}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{0F0C7087-ACA0-4985-8D1E-324BBDECC0DF}"
+	ProjectSection(SolutionItems) = preProject
+		docker-compose.yml = docker-compose.yml
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rythm.FavoriteService", "Rythm.FavoriteService\Rythm.FavoriteService.csproj", "{28960A21-7A99-4461-AA95-715C0425DF9C}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{BB38735F-617A-4F12-8223-C3E30C26878D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BB38735F-617A-4F12-8223-C3E30C26878D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BB38735F-617A-4F12-8223-C3E30C26878D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BB38735F-617A-4F12-8223-C3E30C26878D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F4FBE8EB-3669-40EC-B10C-544CDED53FFC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F4FBE8EB-3669-40EC-B10C-544CDED53FFC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F4FBE8EB-3669-40EC-B10C-544CDED53FFC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F4FBE8EB-3669-40EC-B10C-544CDED53FFC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{372E9230-5BD5-4F57-A53D-48002336AAF1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{372E9230-5BD5-4F57-A53D-48002336AAF1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{372E9230-5BD5-4F57-A53D-48002336AAF1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{372E9230-5BD5-4F57-A53D-48002336AAF1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{31F7501F-B0DF-49B6-8C50-82F9F28C2BA0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{31F7501F-B0DF-49B6-8C50-82F9F28C2BA0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{31F7501F-B0DF-49B6-8C50-82F9F28C2BA0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{31F7501F-B0DF-49B6-8C50-82F9F28C2BA0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{20C4E79E-4489-43AB-A697-3977889F75C4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{20C4E79E-4489-43AB-A697-3977889F75C4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{20C4E79E-4489-43AB-A697-3977889F75C4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{20C4E79E-4489-43AB-A697-3977889F75C4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BA94AAD5-31EB-4175-B267-2B643447E382}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BA94AAD5-31EB-4175-B267-2B643447E382}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BA94AAD5-31EB-4175-B267-2B643447E382}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BA94AAD5-31EB-4175-B267-2B643447E382}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E4FFB53E-A319-4613-BA0B-4B094AA329AC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E4FFB53E-A319-4613-BA0B-4B094AA329AC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E4FFB53E-A319-4613-BA0B-4B094AA329AC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E4FFB53E-A319-4613-BA0B-4B094AA329AC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{28960A21-7A99-4461-AA95-715C0425DF9C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{28960A21-7A99-4461-AA95-715C0425DF9C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{28960A21-7A99-4461-AA95-715C0425DF9C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{28960A21-7A99-4461-AA95-715C0425DF9C}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{BB38735F-617A-4F12-8223-C3E30C26878D} = {460AD708-9BD2-43C6-B4E7-001CD88EC728}
+		{F4FBE8EB-3669-40EC-B10C-544CDED53FFC} = {6EAA06EA-DC72-42E2-8302-3E72B1AF1B29}
+		{372E9230-5BD5-4F57-A53D-48002336AAF1} = {48C05E5F-96A2-4DDB-83B7-DA9B5A59A0D5}
+		{31F7501F-B0DF-49B6-8C50-82F9F28C2BA0} = {48C05E5F-96A2-4DDB-83B7-DA9B5A59A0D5}
+		{20C4E79E-4489-43AB-A697-3977889F75C4} = {48C05E5F-96A2-4DDB-83B7-DA9B5A59A0D5}
+		{BA94AAD5-31EB-4175-B267-2B643447E382} = {48C05E5F-96A2-4DDB-83B7-DA9B5A59A0D5}
+		{E4FFB53E-A319-4613-BA0B-4B094AA329AC} = {6EAA06EA-DC72-42E2-8302-3E72B1AF1B29}
+		{28960A21-7A99-4461-AA95-715C0425DF9C} = {6EAA06EA-DC72-42E2-8302-3E72B1AF1B29}
+	EndGlobalSection
+EndGlobal

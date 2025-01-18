@@ -1,0 +1,218 @@
+.sidebar {
+  background: white;
+  height: 100%;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  border-right: 1px solid #e2e8f0;
+  transition: all 0.3s ease;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1000;
+}
+
+.sidebar.expanded {
+  width: 280px;
+}
+
+.sidebar.collapsed {
+  width: 80px;
+}
+
+.logo-container {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.logo {
+  width: 50px;
+  height: 50px;
+  object-fit: cover;
+}
+
+.logo-container h1 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.profile-section {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  background: #f1f5f9;
+  border-radius: 12px;
+  margin-bottom: 2rem;
+}
+
+.profile-image {
+  width: 40px;
+  height: 40px;
+  background: #e2e8f0;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #64748b;
+}
+
+.profile-info h3 {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #0f172a;
+  margin: 0;
+}
+
+.profile-info p {
+  font-size: 0.875rem;
+  color: #64748b;
+  margin: 0;
+}
+
+.nav-menu {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  flex-grow: 1;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.875rem;
+  border-radius: 12px;
+  color: #ffffff;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.nav-item:hover {
+  background: #f1f5f9;
+  color: #0f172a;
+}
+
+.nav-item.active {
+  background: #3b82f6;
+  color: white;
+}
+
+.nav-item .icon {
+  font-size: 1.25rem;
+  min-width: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sign-out-button {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.875rem;
+  border-radius: 12px;
+  border-radius: 12px;
+  color: #ef4444;
+  background: none;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+  margin-bottom: 40px;
+  transition: all 0.2s ease;
+}
+
+.sign-out-button:hover {
+  background: #fef2f2;
+}
+
+.theme-toggle {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.875rem;
+  border-radius: 12px;
+  color: #ffffff;
+  background: none;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+  margin-top: auto;
+  transition: all 0.2s ease;
+}
+
+.theme-toggle:hover {
+  background: #f1f5f9;
+  color: #0f172a;
+}
+
+.toggle-button {
+  position: absolute;
+  right: -12px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: #3b82f6;
+  color: white;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Dark mode styles */
+[data-theme='dark'] .sidebar {
+  background: #1a1a1a;
+  border-right-color: #404040;
+}
+
+[data-theme='dark'] .logo-container h1 {
+  color: #ffffff;
+}
+
+[data-theme='dark'] .profile-section {
+  background: #2d2d2d;
+}
+
+[data-theme='dark'] .profile-info h3 {
+  color: #ffffff;
+}
+
+[data-theme='dark'] .profile-info p {
+  color: #ffffff;
+}
+
+[data-theme='dark'] .nav-item {
+  color: #ffffff;
+}
+
+[data-theme='dark'] .nav-item:hover {
+  background: #2d2d2d;
+  color: #ffffff;
+}
+
+[data-theme='dark'] .nav-item.active {
+  background: #3b82f6;
+  color: #ffffff;
+}
+
+[data-theme='dark'] .theme-toggle:hover {
+  background: #2d2d2d;
+  color: #ffffff;
+}
+
+[data-theme='dark'] .sign-out-button {
+  color: #ef4444;
+}
+
+[data-theme='dark'] .sign-out-button:hover {
+  background: #450a0a;
+}

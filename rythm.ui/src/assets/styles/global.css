@@ -1,0 +1,89 @@
+:root {
+  --bg-primary: #ffffff;
+  --bg-secondary: #f8fafc;
+  --text-primary: #1f2937;
+  --text-secondary: #6b7280;
+  --border-color: #e5e7eb;
+  --hover-bg: #f1f5f9;
+  --card-bg: #ffffff;
+}
+
+[data-theme='dark'] {
+  --bg-primary: #1e1e1e;
+  --bg-secondary: #141414;
+  --text-primary: #ffffff;
+  --text-secondary: #b5b5b5;
+  --border-color: #2d2d2d;
+  --hover-bg: #2d2d2d;
+  --card-bg: #1e1e1e;
+}
+
+body {
+  background-color: var(--bg-secondary);
+  color: var(--text-primary);
+}
+
+/* Add these CSS variables to your components */
+.home-container,
+.profile-container,
+.favorites-container,
+.library-container,
+.upload-container {
+  background-color: var(--bg-secondary);
+}
+
+.sidebar,
+.profile-header,
+.profile-settings,
+.stat-item {
+  background-color: var(--bg-primary);
+  border-color: var(--border-color);
+}
+
+input,
+textarea,
+select {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  border-color: var(--border-color);
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+  border-color: #3b82f6;
+}
+
+button {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+}
+
+button:hover {
+  background-color: var(--hover-bg);
+}
+
+/* Card and Container Styles */
+.card,
+.container-box {
+  background-color: var(--card-bg);
+  border: 1px solid var(--border-color);
+}
+
+/* Text Styles */
+h1, h2, h3, h4, h5, h6 {
+  color: var(--text-primary);
+}
+
+p, span, label {
+  color: var(--text-secondary);
+}
+
+/* Links */
+a {
+  color: #3b82f6;
+}
+
+a:hover {
+  color: #2563eb;
+}

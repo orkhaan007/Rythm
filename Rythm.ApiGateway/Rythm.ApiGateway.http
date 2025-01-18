@@ -1,0 +1,6 @@
+@Rythm.ApiGateway_HostAddress = http://localhost:5052
+
+GET {{Rythm.ApiGateway_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
